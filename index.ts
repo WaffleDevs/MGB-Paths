@@ -5,9 +5,9 @@ const octokit = new Octokit({
 
 octokit
 	.request("GET /repos/{owner}/{repo}/contents/{path}", {
-		owner: "dengr1065",
-		repo: "shapez-mods",
-		path: "src",
+		owner: "WaffleDevs",
+		repo: "mgb-paths",
+		path: "/PathImages",
 		headers: {
 			"X-GitHub-Api-Version": "2022-11-28",
 		},
