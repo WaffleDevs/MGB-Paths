@@ -1,36 +1,37 @@
-import { Octokit } from "@octokit/core";
+import { ShipRenderMgr, pathData } from "../..";
 
 export class PathCardManager {
-    element: HTMLElement;
-    paths: [];
-    constructor(){
-    }
+	element: HTMLElement;
+	pathCards: HTMLDivElement[];
 
-    inititialize(parent: HTMLElement) {
-        this.element = document.createElement("div");
-        this.element.classList.add("pathCard");
+	constructor() {}
 
-        parent.append(this.element)
+	inititialize() {
+		this.element = document.getElementById("pathViewer");
+	}
 
-        const octokit = new Octokit({
-        	auth: process.env.TOKEN,
-        });
+	createPathCard(data: pathData) {
+		const element = document.createElement("div");
+		element.classList.add("pathCard");
+		const img = document.createElement("img");
+		img.src = ShipRenderMgr.render(data.paths[Object.keys(data.paths)[0]].path);
 
-        octokit
-        	.request("GET /repos/{owner}/{repo}/contents/{path}", {
-        		owner: "WaffleDevs",
-        		repo: "mgb-paths",
-        		path: "/res",
-        		headers: {
-        			"X-GitHub-Api-Version": "2022-11-28",
-        		},
-        	})
-        	.then((res:any) => {
-        		console.log(res);
-        	});
-    }
+		this.pathCards.push(element);
+	}
 
-    renderPaths(filter: []) {
-        
-    }
+	renderPaths(filters: { [key: string]: any }) {
+		this.element.innerHTML = "";
+		const filteredCards: string[] = [];
+		for (const card in this.pathCards) {
+			for (const filter in filters) {
+				const { text, btnId, helpText, func } = filters[filter];
+				if (!$(`#${btnId}Submit`).prop("checked")) return;
+				if (filteredCards.includes(this.pathCards[card].id)) return;
+				if (!func(this.pathCards[card])) return;
+
+				this.element.append(this.pathCards[card]);
+				filteredCards.push(this.pathCards[card].id);
+			}
+		}
+	}
 }

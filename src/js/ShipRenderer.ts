@@ -1,67 +1,49 @@
-import { ShipStringMgr } from "../..";
-import { ShipData } from "./shipString"
-import contentStuff from "./contentStuff.json";
+import { chunks } from "./content";
+import { ShipData, decodeShipString, getSprite } from "./util";
 
 export class ShipRenderer {
-    element: HTMLElement;
-    string: string;
-    canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
+	canvas: HTMLCanvasElement;
+	ctx: CanvasRenderingContext2D;
 
-    shipData: ShipData;
+	imageCache: {
+		[key: number | string]: string;
+	} = {};
 
-    constructor(element: HTMLElement, string: string) {
-        this.element = element;
-        this.string = string;
-    }
+	initializeRenderer() {
+		this.canvas = document.createElement("canvas");
+		this.canvas.width = 300;
+		this.canvas.height = 300;
+		this.canvas.style.left = "50%";
+		this.canvas.style.position = "absolute";
+		this.ctx = this.canvas.getContext("2d");
 
-    initializeRenderer(parent: HTMLElement) {
-        this.canvas = document.createElement("canvas")
-        this.canvas.classList.add("shipRenderer")
-        
-        
-        this.ctx = this.canvas.getContext("2d")
+		Object.keys(chunks).forEach((chunk) => {
+			const img = new Image(300, 300);
+			img.src = chunks[chunk];
+			img.onload = () => {
+				this.ctx.drawImage(img, 0, 0, 300, 300);
+			};
+		});
 
-        parent.append(this.canvas)
-
-        setInterval(() => {
-			this.resizeCanvas();
-		}, 1000);
-        this.resizeCanvas()
-    }
-
-    resizeCanvas() {
-		///$(this.canvas.parentElement).css("width", "100%");
-		//$(this.canvas.parentElement).css("height", "100%");
-
-		$(this.canvas).css("width", "100%");
-		$(this.canvas).css("height", "100%");
-		const min = Math.round(Math.min($(this.canvas).width(), $(this.canvas).height()));
-		//const min = Math.round($(this.canvas).height());
-		$(this.canvas).width(min);
-		$(this.canvas).height(min);
-		$(this.canvas.parentElement).width(min);
-		$(this.canvas.parentElement).height(min);
-		this.ctx.canvas.width = min;
-		this.ctx.canvas.height = min;
+		document.body.append(this.canvas);
 	}
 
-    render() {
-        const step = this.canvas.width/4;
-        if(!this.shipData) 
-        {
-            const decode = ShipStringMgr.decodeShipString(this.string) as ShipData;
-            if(typeof decode != "object") throw new SyntaxError("Invalid String.")
-            this.shipData = decode;
-        }
+	render(string: string): any {
+		const decode = decodeShipString(string) as ShipData;
+		if (typeof decode != "object") throw new SyntaxError("Invalid String.");
+		if (this.imageCache[decode.chunks.join("")]) return this.imageCache[decode.chunks.join("")];
 
-        for(let x = 0; x < 4; x++){
-            for(let y = 0; y < 4; y++){
-                const img = new Image(x*step,y*step);
-                img.src = `../../res/Chunks/${this.shipData.chunks[`x${x}y${y}`]}.png`
-                this.ctx.drawImage(img,x*step,y*step) 
-            }
-        }
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		const step = this.canvas.width / 4;
 
-    }
+		for (let x = 0; x < 4; x++) {
+			for (let y = 0; y < 4; y++) {
+				const img = new Image(step, step);
+				img.src = chunks[decode.chunks[x + y * 4] - 1];
+				this.ctx.drawImage(img, x * step, y * step, step, step);
+			}
+		}
+		this.imageCache[decode.chunks.join("")] = this.canvas.toDataURL();
+		return this.imageCache[decode.chunks.join("")];
+	}
 }
