@@ -4,26 +4,67 @@ export const filters: {
 	[key: string]: any;
 } = {
 	hidePortals: {
-		text: "No Portals.",
+		text: "No Portals",
 		btnId: "hidePortals",
 		helpText: "Hides any custom ships that don't have a non-portal variant.",
 		func: function (card: HTMLDivElement) {
 			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
-			console.log(Object.keys(path.paths).filter((ppath) => path.paths[ppath].tags.includes("noportal")));
 			return Object.keys(path.paths).filter((ppath) => path.paths[ppath].tags.includes("noportal"));
 		},
 	},
-	dynamicYsSize: {
-		text: "Dynamic yS Size",
-		btnId: "dynamicYsSize",
-		helpText: "Changes the YS Square size depending on amount. Full = 10% of tier. Small Square = 1;",
-		func: function () {},
+	isSnail: {
+		text: "Is Snail",
+		btnId: "isSnail",
+		helpText: "If is snail.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "snail");
+		},
 	},
-	disableTierNumbers: {
-		text: "Disable Tier Numbers",
-		btnId: "disableTierNumbers",
-		helpText: "No Tier Numbers",
-		func: function () {},
+	isWhip: {
+		text: "Is Whip",
+		btnId: "isWhip",
+		helpText: "If is whip.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "whip");
+		},
+	},
+	isBeast: {
+		text: "Is Beast",
+		btnId: "isBeast",
+		helpText: "If is beast.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "beast");
+		},
+	},
+	isZigzag: {
+		text: "Is Zigzag",
+		btnId: "isZigzag",
+		helpText: "If is zigzag.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "zigzag");
+		},
+	},
+	isTiers: {
+		text: "Is Tiers",
+		btnId: "isTiers",
+		helpText: "If is tiers.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "tiers");
+		},
+	},
+	isWaves: {
+		text: "Is Waves",
+		btnId: "isWaves",
+		helpText: "If is waves.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			return doesPathDataHaveTag(path, "waves");
+		},
 	},
 };
 
@@ -36,7 +77,7 @@ export function initializeFilters() {
 	let maxSize = 0;
 	for (const filter in filters) {
 		const { text, btnId, helpText } = filters[filter];
-		const globalSize = $(window).width() * 0.0085 + 1;
+		const globalSize = $(window).width() * 0.01 + 1;
 		console.log(globalSize, text.length, text);
 		maxSize = text.length * globalSize > maxSize ? text.length * globalSize : maxSize;
 		filterStates[filter] = false;
@@ -73,4 +114,7 @@ export function shouldFilter() {
 		}
 	}
 	return shouldFilter;
+}
+export function doesPathDataHaveTag(data: pathData, tag: string) {
+	return Object.keys(data.paths).filter((path) => data.paths[path].tags.includes(tag)).length > 0;
 }
