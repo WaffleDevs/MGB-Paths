@@ -1,13 +1,17 @@
-import { PathCardMgr } from "../..";
+import { PathCardMgr, pathData, pathJsons } from "../..";
 
-const options: {
+export const filters: {
 	[key: string]: any;
 } = {
-	hideFilteredWorlds: {
-		text: "Hide Filtered Worlds",
-		btnId: "hideFilteredWorlds",
-		helpText: "Disables rendering of any worlds that don't fit the filters.",
-		func: function () {},
+	hidePortals: {
+		text: "No Portals.",
+		btnId: "hidePortals",
+		helpText: "Hides any custom ships that don't have a non-portal variant.",
+		func: function (card: HTMLDivElement) {
+			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
+			console.log(Object.keys(path.paths).filter((ppath) => path.paths[ppath].tags.includes("noportal")));
+			return Object.keys(path.paths).filter((ppath) => path.paths[ppath].tags.includes("noportal"));
+		},
 	},
 	dynamicYsSize: {
 		text: "Dynamic yS Size",
@@ -23,17 +27,19 @@ const options: {
 	},
 };
 
-export const optionStates: {
+export const filterStates: {
 	[key: string]: any;
 } = {};
 
-export function initializeOptions() {
+export function initializeFilters() {
+	console.log("a");
 	let maxSize = 0;
-	for (const option in options) {
-		const { text, btnId, helpText } = options[option];
+	for (const filter in filters) {
+		const { text, btnId, helpText } = filters[filter];
 		const globalSize = $(window).width() * 0.0085 + 1;
+		console.log(globalSize, text.length, text);
 		maxSize = text.length * globalSize > maxSize ? text.length * globalSize : maxSize;
-		optionStates[option] = false;
+		filterStates[filter] = false;
 		const element = $(`
         <div class="rounded-full bg-gray-600 p-4 flex items-center relative w-full cursor-pointer select-none min-w-full">
             <span class="hasHelp text-[1vw] font-bold">${text}</span>
@@ -42,20 +48,29 @@ export function initializeOptions() {
                 <input
                     id="${btnId}Input"
                     type="checkbox"
-                    class="appearance-none transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-red-500"
+                    class=" transition-colors cursor-pointer w-14 h-7 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-blue-500 bg-red-500"
                 />
-                <span class="absolute font-medium text-xs uppercase right-1 text-white pointer-events-none"> OFF </span>
-                <span class="absolute font-medium text-xs uppercase right-8 text-white pointer-events-none"> ON </span>
-                <span class="w-7 h-7 right-7 absolute rounded-full transform transition-transform bg-gray-200 pointer-events-none" />
+                
             </div>
         </div>
     `);
-		$("#options").append(element);
+		$("#filters").append(element);
 		$(`#${btnId}Input`).on("click", () => {
-			optionStates[option] = $(`#${btnId}Input`).prop("checked");
-			PathCardMgr.renderPaths(optionStates);
+			filterStates[filter] = $(`#${btnId}Input`).prop("checked");
+			PathCardMgr.renderPaths();
 		});
 	}
-	$(`#options`).css(`min-width`, `${maxSize}px`);
-	$(`#options`).css(`max-width`, `${maxSize}px`);
+	$(`#filters`).css(`min-width`, `${maxSize}px`);
+	$(`#filters`).css(`max-width`, `${maxSize}px`);
+}
+
+export function shouldFilter() {
+	let shouldFilter = false;
+	for (const filter in filters) {
+		const { text, btnId, helpText, func } = filters[filter];
+		if ($(`#${btnId}Input`).prop("checked")) {
+			shouldFilter = true;
+		}
+	}
+	return shouldFilter;
 }

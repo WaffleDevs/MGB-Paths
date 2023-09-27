@@ -16,21 +16,8 @@ export function octoRequest(path: string) {
 }
 
 export function getSprite(folder: string, sprite: string) {
+	console.log(`res/${folder}/${sprite}.png`);
 	return octoRequest(`res/${folder}/${sprite}.png`);
-}
-
-export function createImage(src: string, id?: string, classes?: string[]) {
-	const img = document.createElement("img");
-	img.src = src;
-	img.id = id;
-	img.classList.add(...classes);
-	return img;
-}
-
-export function createImageOcto(folder: string, sprite: string, id?: string, classes?: string[]) {
-	return getSprite(folder, sprite).then((res: any) => {
-		return createImage("data:image/png;base64," + res.data.content, id, classes);
-	});
 }
 
 export type ShipData = {
@@ -108,4 +95,16 @@ export function decodeShipString(string: string): ShipData | Boolean | SyntaxErr
 	// 	}
 	// }
 	return returnShip;
+}
+
+export function onload(img: HTMLImageElement, func: Function) {
+	return new Promise<void>((resolve, reject) => {
+		img.onload = (e) => {
+			func(e);
+			resolve();
+		};
+		img.onerror = (e, s, l, c, er) => {
+			reject(`${e}, ${s}, ${l}, ${c}, ${er}`);
+		};
+	});
 }
