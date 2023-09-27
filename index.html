@@ -74,7 +74,7 @@
 
 		<script>
 			// Early Development only. When I do get a web server running in /dist/, this will be useless
-			if (window.location.pathname != "/dist/") window.location.pathname = "/dist/";
+			if (window.location.pathname != "/dist/" && window.location.hostname == "127.0.0.1") window.location.pathname = "/dist/";
 		</script>
 	</body>
 </html>
