@@ -1,7 +1,7 @@
 import { Octokit } from "@octokit/core";
 
 const octokit = new Octokit({
-	auth: atob("Z2l0aHViX3BhdF8xMUFTTkRPTVkwSDRaUFhXQlpOTlluX3d4dkZTS0dVdFc2TjJBaFFncjRQMVVVVFJTdktJZU1vZnh1UXZYQjhiZ2VTUURVRE5HM0VENkx3b1JP"),
+	auth: atob("Z2l0aHViX3BhdF8xMUFTTkRPTVkwSFA0SHRTeTI0bnJLX3BPWEtONVVZWE1kWFc4dW52VWdHS0QxTTJ5dzhQTlhKcmV2bE1JVExiTU9CNUcyVUxWSnJCRVFqM2Za"),
 });
 
 export function octoRequest(path: string) {
