@@ -9,7 +9,7 @@ export const filters: {
 		helpText: "Hides any custom ships that don't have a non-portal variant.",
 		func: function (card: HTMLDivElement) {
 			const path = pathJsons.filter((path: pathData) => path.name == card.id)[0];
-			return Object.keys(path.paths).filter((ppath) => path.paths[ppath].tags.includes("noportal"));
+			return doesPathDataHaveTag(path, "noportal");
 		},
 	},
 	isSnail: {

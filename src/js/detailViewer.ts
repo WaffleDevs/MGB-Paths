@@ -3,6 +3,12 @@ import { DetailViewer, pathData, pathJsons } from "../..";
 export class detailViewer {
 	detailViewer: HTMLDivElement;
 	selectedPath: pathData;
+	currentPath: {
+		path: string;
+		description: string;
+		src?: string;
+		tags: string[];
+	};
 
 	selectedImage: HTMLImageElement;
 	otherPaths: HTMLDivElement;
@@ -45,18 +51,21 @@ export class detailViewer {
 			console.log(e);
 			this.detailViewer.style.display = "none";
 		});
-	}
 
+		$("#copySelectedString").on("click", (e) => {
+			navigator.clipboard.writeText(this.currentPath.path);
+			$("#copySelectedString").text("Copied!");
+
+			setTimeout(() => $("#copySelectedString").text("Copy Ingame String"), 1000);
+		});
+	}
 	showViewer(path: string) {
-		const currentPath = this.selectedPath.paths[Object.keys(this.selectedPath.paths).filter((ship) => this.selectedPath.paths[ship].src == path)[0]];
-		console.log(currentPath);
-		console.log(Object.keys(this.selectedPath.paths).filter((ship) => this.selectedPath.paths[ship].src == path));
-		console.log(path);
+		this.currentPath = this.selectedPath.paths[Object.keys(this.selectedPath.paths).filter((ship) => this.selectedPath.paths[ship].src == path)[0]];
 		this.otherPaths.innerHTML = "";
 		this.selectedImage.src = path;
 
-		this.selectedDescription.textContent = currentPath.description;
-		//this.selectedTags.textContent = currentPath.tags.join(", ");
+		this.selectedDescription.textContent = this.currentPath.description;
+		this.selectedTags.textContent = this.currentPath.tags.join(", ");
 		this.selectedName.textContent = this.selectedPath.name;
 
 		this.detailViewer.style.display = "grid";

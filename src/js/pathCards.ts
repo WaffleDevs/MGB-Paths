@@ -37,11 +37,11 @@ export class PathCardManager {
 			if (shouldFilter()) {
 				console.log("filter");
 				for (const filter in filters) {
-					if (!filterStates[filter]) return;
-					if (filteredCards.includes(this.pathCards[card].id)) return;
+					if (!filterStates[filter]) continue;
+					if (filteredCards.includes(this.pathCards[card].id)) continue;
 
 					const { text, btnId, helpText, func } = filters[filter];
-					if (!func(this.pathCards[card])) return;
+					if (!func(this.pathCards[card])) continue;
 
 					this.element.append(this.pathCards[card]);
 					filteredCards.push(this.pathCards[card].id);
