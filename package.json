@@ -12,6 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jquery": "^3.5.16",
+    "@types/ndarray": "^1.0.12",
     "html-webpack-plugin": "^5.5.3",
     "tailwindcss": "^3.3.3",
     "ts-loader": "^9.4.4",
@@ -21,6 +22,8 @@
   },
   "dependencies": {
     "@octokit/core": "^5.0.0",
-    "dotenv-webpack": "^8.0.1"
+    "dotenv-webpack": "^8.0.1",
+    "l1-path-finder": "^1.0.0",
+    "ndarray": "^1.0.19"
   }
 }

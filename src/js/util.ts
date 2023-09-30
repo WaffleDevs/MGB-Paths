@@ -1,8 +1,6 @@
 import { Octokit } from "@octokit/core";
 
-const octokit = new Octokit({
-	auth: atob("Z2l0aHViX3BhdF8xMUFTTkRPTVkwSFA0SHRTeTI0bnJLX3BPWEtONVVZWE1kWFc4dW52VWdHS0QxTTJ5dzhQTlhKcmV2bE1JVExiTU9CNUcyVUxWSnJCRVFqM2Za"),
-});
+const octokit = new Octokit({});
 
 export function octoRequest(path: string) {
 	return octokit.request("GET /repos/{owner}/{repo}/contents/{path}", {

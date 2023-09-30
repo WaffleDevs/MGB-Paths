@@ -11,7 +11,7 @@ import chunk8 from "../../res/Chunks/8.png";
 import chunk9 from "../../res/Chunks/9.png";
 import chunk10 from "../../res/Chunks/10.png";
 import chunk11 from "../../res/Chunks/11.png";
-import chunkE from "../../res/Chunks/empty.png";
+import chunk12 from "../../res/Chunks/12.png";
 
 import item0 from "../../res/Items/item0.png";
 import item1 from "../../res/Items/item1.png";
@@ -95,7 +95,7 @@ export const chunks: {
 	"9": chunk9,
 	"10": chunk10,
 	"11": chunk11,
-	E: chunkE,
+	"12": chunk12,
 };
 
 export const items = {

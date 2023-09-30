@@ -16,8 +16,8 @@ module.exports = {
 			},
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
-				type: 'asset/resource',
-			  },
+				type: "asset/resource",
+			},
 		],
 	},
 	resolve: {
@@ -27,12 +27,11 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			template: "index.html",
 		}),
-		new Dotenv(),
 	],
 	output: {
 		filename: "[name].bundle.js",
 		path: path.resolve(__dirname, "dist"),
-		clean: true
+		clean: true,
 	},
 	watch: true,
 };

@@ -27,8 +27,6 @@ export class ShipRenderer {
 			await onload(img, () => {
 				this.ctx.drawImage(img, 0, 0, canvasSize, canvasSize);
 
-				if (chunk == "E") chunk = `-1`;
-
 				this.chunkImages[chunk] = img;
 			});
 			console.log(this.chunkImages[chunk]);
@@ -48,7 +46,7 @@ export class ShipRenderer {
 
 			for (let x = 0; x < 4; x++) {
 				for (let y = 0; y < 4; y++) {
-					const img = this.chunkImages[decode.chunks[x + y * 4] - 1];
+					const img = this.chunkImages[decode.chunks[x + y * 4]];
 					this.ctx.drawImage(img, x * step, y * step, step, step);
 				}
 			}
